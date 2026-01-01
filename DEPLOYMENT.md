@@ -14,14 +14,14 @@ Vercel is the easiest way to host a React/Vite project. It's fast, free, and aut
    git add .
    git commit -m "initial commit"
    git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/my-ai-portfolio.git
+   git remote add origin https://github.com/saqib-niaxi/saqibniazi.git
    git push -u origin main
    ```
 
 ### Step 2: Connect to Vercel
 1. Go to [vercel.com](https://vercel.com/) and sign up with your GitHub account.
 2. Click **"New Project"**.
-3. Import your repository (`my-ai-portfolio`).
+3. Import your repository (`saqibniazi`).
 4. Click **"Deploy"**.
 
 **Your site will be live in less than 2 minutes!** 🎊

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon-cropped.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Muhammad Saqib Khan - AI Software Developer</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -34,6 +34,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <!-- VanillaTilt for 3D Card Effect -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
   <script type="importmap">
 {
   "imports": {
@@ -45,6 +56,7 @@
 }
 </script>
   <style>
+    /* Dark mode background */
     html.dark body {
       background-image: linear-gradient(rgba(18, 18, 18, 0.88), rgba(18, 18, 18, 0.88)), url('https://images.unsplash.com/photo-1506443432602-ac2fcd6f54e0?q=80&w=1974&auto=format&fit=crop');
       background-size: cover;
@@ -52,13 +64,696 @@
       background-attachment: fixed;
       background-repeat: no-repeat;
     }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Custom Cursor
+       ============================================ */
+    .custom-cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #F5C518;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+      mix-blend-mode: difference;
+    }
+
+    .custom-cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: #F5C518;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.08s ease-out;
+    }
+
+    .custom-cursor.hover {
+      transform: scale(2);
+      background: rgba(245, 197, 24, 0.1);
+    }
+
+    html:not(.dark) .custom-cursor {
+      border-color: #0D9488;
+    }
+
+    html:not(.dark) .custom-cursor-dot {
+      background: #0D9488;
+    }
+
+    /* Hide default cursor on desktop */
+    @media (min-width: 768px) {
+      body {
+        cursor: none;
+      }
+      a, button {
+        cursor: none;
+      }
+    }
+
+    /* Show default cursor on mobile */
+    @media (max-width: 767px) {
+      .custom-cursor, .custom-cursor-dot {
+        display: none !important;
+      }
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Animated Gradient Hero
+       ============================================ */
+    .gradient-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .gradient-bg::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(245, 197, 24, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+      animation: gradientMove 20s ease-in-out infinite;
+    }
+
+    html:not(.dark) .gradient-bg::before {
+      background:
+        radial-gradient(circle at 20% 80%, rgba(13, 148, 136, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(245, 197, 24, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+    }
+
+    @keyframes gradientMove {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(2%, 2%) rotate(1deg);
+      }
+      50% {
+        transform: translate(0, 4%) rotate(0deg);
+      }
+      75% {
+        transform: translate(-2%, 2%) rotate(-1deg);
+      }
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Magnetic Buttons
+       ============================================ */
+    .magnetic-btn {
+      position: relative;
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .magnetic-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .magnetic-btn::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(245, 197, 24, 0.4), rgba(13, 148, 136, 0.4));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      filter: blur(8px);
+    }
+
+    .magnetic-btn:hover::after {
+      opacity: 1;
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - 3D Card Tilt
+       ============================================ */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .tilt-card:hover {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    html.dark .tilt-card:hover {
+      box-shadow: 0 25px 50px -12px rgba(245, 197, 24, 0.15);
+    }
+
+    .tilt-card-inner {
+      transform: translateZ(30px);
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Text Reveal
+       ============================================ */
+    .reveal-text {
+      overflow: hidden;
+    }
+
+    .reveal-text span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+
+    .reveal-text.revealed span {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Stagger delay for each word */
+    .reveal-text span:nth-child(1) { transition-delay: 0s; }
+    .reveal-text span:nth-child(2) { transition-delay: 0.05s; }
+    .reveal-text span:nth-child(3) { transition-delay: 0.1s; }
+    .reveal-text span:nth-child(4) { transition-delay: 0.15s; }
+    .reveal-text span:nth-child(5) { transition-delay: 0.2s; }
+    .reveal-text span:nth-child(6) { transition-delay: 0.25s; }
+    .reveal-text span:nth-child(7) { transition-delay: 0.3s; }
+    .reveal-text span:nth-child(8) { transition-delay: 0.35s; }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Scroll Reveal
+       ============================================ */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Staggered cards animation */
+    .stagger-card {
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+    }
+
+    .stagger-card.revealed {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Floating Elements
+       ============================================ */
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Glow Effect
+       ============================================ */
+    .glow-effect {
+      position: relative;
+    }
+
+    .glow-effect::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, #F5C518, #0D9488, #8B5CF6, #F5C518);
+      background-size: 400% 400%;
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0;
+      animation: glowRotate 3s linear infinite;
+      transition: opacity 0.3s ease;
+      filter: blur(6px);
+    }
+
+    .glow-effect:hover::before {
+      opacity: 0.7;
+    }
+
+    @keyframes glowRotate {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Smooth Transitions
+       ============================================ */
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    .lenis.lenis-smooth iframe {
+      pointer-events: none;
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Available Badge Pulse
+       ============================================ */
+    .pulse-dot {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+      }
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Link Hover Effect
+       ============================================ */
+    .link-hover-effect {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-hover-effect::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+
+    .link-hover-effect:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* ============================================
+       PREMIUM ANIMATIONS - Image Reveal
+       ============================================ */
+    .image-reveal {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-reveal::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #F5C518, #0D9488);
+      transform: translateX(-101%);
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    .image-reveal.revealed::after {
+      transform: translateX(101%);
+    }
+
+    .image-reveal img {
+      transform: scale(1.2);
+      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    .image-reveal.revealed img {
+      transform: scale(1);
+    }
   </style>
   <link rel="stylesheet" href="/index.css">
 </head>
 
 <body class="bg-light-bg dark:bg-dark-bg text-dark-text dark:text-light-text font-sans transition-colors duration-300">
+  <!-- Animated Gradient Background -->
+  <div class="gradient-bg"></div>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="cursor"></div>
+  <div class="custom-cursor-dot" id="cursor-dot"></div>
+
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
+
+  <!-- Premium Animations Initialization -->
+  <script>
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // ============================================
+      // 1. LENIS SMOOTH SCROLL
+      // ============================================
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Integrate with GSAP ScrollTrigger
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+
+      // ============================================
+      // 2. CUSTOM CURSOR
+      // ============================================
+      const cursor = document.getElementById('cursor');
+      const cursorDot = document.getElementById('cursor-dot');
+      let mouseX = 0, mouseY = 0;
+      let cursorX = 0, cursorY = 0;
+      let dotX = 0, dotY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      // Smooth cursor animation
+      function animateCursor() {
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
+        dotX += (mouseX - dotX) * 0.25;
+        dotY += (mouseY - dotY) * 0.25;
+
+        cursor.style.left = cursorX - 10 + 'px';
+        cursor.style.top = cursorY - 10 + 'px';
+        cursorDot.style.left = dotX - 4 + 'px';
+        cursorDot.style.top = dotY - 4 + 'px';
+
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      // Cursor hover effect on interactive elements
+      const hoverElements = document.querySelectorAll('a, button, [role="button"]');
+      const observeHoverElements = () => {
+        document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+      };
+
+      // Initial observation and re-observe on DOM changes
+      observeHoverElements();
+      const observer = new MutationObserver(observeHoverElements);
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      // ============================================
+      // 3. GSAP SCROLL ANIMATIONS
+      // ============================================
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Animate sections on scroll
+      const initScrollAnimations = () => {
+        // Section headers
+        gsap.utils.toArray('h2').forEach((heading) => {
+          gsap.fromTo(heading,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: heading,
+                start: 'top 85%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
+        });
+
+        // Paragraphs under headings
+        gsap.utils.toArray('h2 + p').forEach((para) => {
+          gsap.fromTo(para,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              delay: 0.2,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: para,
+                start: 'top 85%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
+        });
+
+        // Staggered cards animation for project cards
+        const cardContainers = document.querySelectorAll('[class*="grid"]');
+        cardContainers.forEach((container) => {
+          const cards = container.children;
+          if (cards.length > 1) {
+            gsap.fromTo(cards,
+              { opacity: 0, y: 60, scale: 0.95 },
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                  trigger: container,
+                  start: 'top 80%',
+                  toggleActions: 'play none none none'
+                }
+              }
+            );
+          }
+        });
+      };
+
+      // Initialize with a small delay to ensure React has rendered
+      setTimeout(initScrollAnimations, 500);
+
+      // ============================================
+      // 4. VANILLA TILT FOR 3D CARDS
+      // ============================================
+      const initTiltCards = () => {
+        const tiltElements = document.querySelectorAll('.tilt-card, [class*="rounded-xl"][class*="shadow"], [class*="rounded-2xl"][class*="shadow"]');
+        tiltElements.forEach((el) => {
+          if (!el.vanillaTilt) {
+            VanillaTilt.init(el, {
+              max: 8,
+              speed: 400,
+              glare: true,
+              'max-glare': 0.15,
+              scale: 1.02,
+              perspective: 1000,
+            });
+          }
+        });
+      };
+
+      // Initialize tilt and re-init on DOM changes
+      setTimeout(initTiltCards, 600);
+      const tiltObserver = new MutationObserver(() => {
+        setTimeout(initTiltCards, 100);
+      });
+      tiltObserver.observe(document.body, { childList: true, subtree: true });
+
+      // ============================================
+      // 5. MAGNETIC BUTTONS
+      // ============================================
+      const initMagneticButtons = () => {
+        const buttons = document.querySelectorAll('a[class*="bg-primary"], button[class*="bg-primary"], a[class*="rounded-lg"][class*="font-semibold"]');
+
+        buttons.forEach((btn) => {
+          if (btn.dataset.magnetic) return;
+          btn.dataset.magnetic = 'true';
+          btn.classList.add('magnetic-btn');
+
+          btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.05)`;
+          });
+
+          btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0, 0) scale(1)';
+          });
+        });
+      };
+
+      setTimeout(initMagneticButtons, 600);
+      const magneticObserver = new MutationObserver(() => {
+        setTimeout(initMagneticButtons, 100);
+      });
+      magneticObserver.observe(document.body, { childList: true, subtree: true });
+
+      // ============================================
+      // 6. HERO TEXT ANIMATION
+      // ============================================
+      const initHeroAnimation = () => {
+        const heroHeading = document.querySelector('h1');
+        if (heroHeading && !heroHeading.dataset.animated) {
+          heroHeading.dataset.animated = 'true';
+
+          gsap.fromTo(heroHeading,
+            { opacity: 0, y: 80, scale: 0.9 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1,
+              ease: 'power4.out',
+              delay: 0.2
+            }
+          );
+
+          // Animate hero paragraph
+          const heroPara = heroHeading.nextElementSibling;
+          if (heroPara && heroPara.tagName === 'P') {
+            gsap.fromTo(heroPara,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                delay: 0.5
+              }
+            );
+          }
+
+          // Animate hero buttons
+          const heroButtons = document.querySelector('h1')?.parentElement?.querySelector('[class*="flex"][class*="gap"]');
+          if (heroButtons) {
+            gsap.fromTo(heroButtons.children,
+              { opacity: 0, y: 30 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.15,
+                ease: 'power3.out',
+                delay: 0.7
+              }
+            );
+          }
+        }
+      };
+
+      setTimeout(initHeroAnimation, 300);
+
+      // ============================================
+      // 7. IMAGE HOVER EFFECTS
+      // ============================================
+      const initImageEffects = () => {
+        const images = document.querySelectorAll('img[class*="rounded"]');
+        images.forEach((img) => {
+          if (img.dataset.effectInit) return;
+          img.dataset.effectInit = 'true';
+
+          img.addEventListener('mouseenter', () => {
+            gsap.to(img, {
+              scale: 1.05,
+              duration: 0.4,
+              ease: 'power2.out'
+            });
+          });
+
+          img.addEventListener('mouseleave', () => {
+            gsap.to(img, {
+              scale: 1,
+              duration: 0.4,
+              ease: 'power2.out'
+            });
+          });
+        });
+      };
+
+      setTimeout(initImageEffects, 600);
+
+      // ============================================
+      // 8. AVAILABLE BADGE ANIMATION
+      // ============================================
+      const initBadgeAnimation = () => {
+        const badge = document.querySelector('[class*="Available"]')?.closest('[class*="flex"]');
+        if (badge && !badge.dataset.animated) {
+          badge.dataset.animated = 'true';
+
+          gsap.fromTo(badge,
+            { opacity: 0, x: -30 },
+            {
+              opacity: 1,
+              x: 0,
+              duration: 0.6,
+              ease: 'back.out(1.7)',
+              delay: 0.1
+            }
+          );
+        }
+      };
+
+      setTimeout(initBadgeAnimation, 400);
+
+      // ============================================
+      // RE-INITIALIZE ON REACT UPDATES
+      // ============================================
+      const reinitObserver = new MutationObserver(() => {
+        initScrollAnimations();
+      });
+      reinitObserver.observe(document.getElementById('root'), {
+        childList: true,
+        subtree: true,
+        attributes: false
+      });
+
+      console.log('Premium animations initialized successfully!');
+    });
+  </script>
 </body>
 
 </html>
